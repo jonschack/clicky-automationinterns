@@ -170,7 +170,7 @@ struct BlueCursorView: View {
     private let onboardingVideoPlayerWidth: CGFloat = 330
     private let onboardingVideoPlayerHeight: CGFloat = 186
 
-    private let fullWelcomeMessage = "hey! i'm clicky"
+    private let fullWelcomeMessage = "hey! i'm clicky, your coding buddy"
 
     private let navigationPointerPhrases = [
         "right here!",
@@ -689,8 +689,14 @@ struct BlueCursorView: View {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                     self.showWelcome = false
-                    // Start the onboarding video right after the welcome text disappears
-                    self.companionManager.setupOnboardingVideo()
+                    // Trigger the demo pointing interaction so the intern sees
+                    // Clicky find something on their screen and fly to it
+                    self.companionManager.performOnboardingDemoInteraction()
+                    // After a short delay, stream the onboarding prompt telling
+                    // the intern how to use push-to-talk
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                        self.companionManager.streamOnboardingPrompt()
+                    }
                 }
                 return
             }
