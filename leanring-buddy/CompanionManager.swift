@@ -69,8 +69,16 @@ final class CompanionManager: ObservableObject {
     // streamingResponseText, so no separate response overlay manager is needed.
 
     /// Base URL for the Cloudflare Worker proxy. All API requests route
-    /// through this so keys never ship in the app binary.
-    private static let workerBaseURL = "https://your-worker-name.your-subdomain.workers.dev"
+    /// through this so keys never ship in the app binary. Read from
+    /// Info.plist key "WorkerBaseURL" so it can be set at build time
+    /// without modifying source code.
+    private static let workerBaseURL: String = {
+        guard let configuredURL = AppBundleConfiguration.stringValue(forKey: "WorkerBaseURL") else {
+            print("⚠️ Clicky: WorkerBaseURL not set in Info.plist — API calls will fail")
+            return "https://your-worker-name.your-subdomain.workers.dev"
+        }
+        return configuredURL
+    }()
 
     private lazy var claudeAPI: ClaudeAPI = {
         return ClaudeAPI(proxyURL: "\(Self.workerBaseURL)/chat", model: selectedModel)

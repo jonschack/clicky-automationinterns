@@ -36,6 +36,8 @@ The app never calls external APIs directly. All requests go through a Cloudflare
 Worker secrets: `ANTHROPIC_API_KEY`, `ASSEMBLYAI_API_KEY`, `ELEVENLABS_API_KEY`
 Worker vars: `ELEVENLABS_VOICE_ID`
 
+**App Configuration (Info.plist)**: The Worker proxy URL is set via the `WorkerBaseURL` key in Info.plist, read at runtime by `AppBundleConfiguration`. This allows the URL to be configured at build time without modifying source code. See `DEPLOYMENT.md` for the full deployment guide.
+
 ### Key Architecture Decisions
 
 **Menu Bar Panel Pattern**: The companion panel uses `NSStatusItem` for the menu bar icon and a custom borderless `NSPanel` for the floating control panel. This gives full control over appearance (dark, rounded corners, custom shadow) and avoids the standard macOS menu/popover chrome. The panel is non-activating so it doesn't steal focus. A global event monitor auto-dismisses it on outside clicks.
